@@ -15,12 +15,13 @@
     <div id="app"></div>
     <script src="layui/layui.js"></script>
     <script>
+        // 配置模块根目录
         layui.config({
             //指定 admin 项目路径
             base: './nepadmin/',
             version: Date.parse(new Date()),
             debug: true
-        }).use('index');
+        }).use('index');  // 调用 index.js 方法
     </script>
 </body>
 <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->

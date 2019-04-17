@@ -1,3 +1,4 @@
+// 扩展 conf 模块
 layui.define(function(exports) {
   exports('conf', {
     //容器ID

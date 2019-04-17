@@ -1,10 +1,9 @@
-layui
-  .extend({
-    conf: 'config',
-    api: 'lay/modules/api',
-    view: 'lay/modules/view'
+layui.extend({
+    conf: 'config',  // 设定模块目录
+    api: 'lay/modules/api', // 设定模块目录
+    view: 'lay/modules/view' // 设定模块目录
   })
-  .define(['conf', 'view', 'api', 'jquery'], function(exports) {
+  .define(['conf', 'view', 'api', 'jquery'], function(exports) {   // 扩展模块依赖 'conf', 'view', 'api', 'jquery'
     POPUP_DATA = {}
     var conf = layui.conf
     var view = layui.view
@@ -42,6 +41,8 @@ layui
       }
       return self.loginToken
     }
+
+    // 注销
     self.logout = function() {
       self.data({ key: conf.tokenName, remove: true })
       self.data({ key: conf.tokenName, remove: true }, sessionStorage)
@@ -49,6 +50,8 @@ layui
 
       self.navigate(conf.loginPage)
     }
+    
+    // 登录
     self.login = function(token, data, isSession) {
       self.data(
         {
@@ -69,6 +72,7 @@ layui
         self.data(disableData)
       }
     }
+
     //初始化整个页面
     self.initPage = function(initCallback) {
       //加载样式文件
@@ -77,24 +81,12 @@ layui
       })
       self.initView(self.route)
     }
+
+
     self.post = function(params) {
       view.request($.extend({ type: 'post' }, params))
     }
 
-    /**
-    self.router = function(url) {
-      var route
-      if (url) {
-        url = '#' + url
-        if (url == '#/') url += conf.entry
-        console.log(url)
-      } else {
-        route = layui.router()
-      }
-      route.fileurl = '/' + route.path.join('/')
-      return route
-    }
-     */
     //初始化视图区域
     self.initView = function(route) {
       if (!self.route.href || self.route.href == '/') {
@@ -156,6 +148,8 @@ layui
         elem.click()
       }
     }
+
+    // 可适应页面
     self.flexible = function(open) {
       if (open == true) {
         view.container.removeClass(self.shrinkCls)
@@ -163,20 +157,30 @@ layui
         view.container.addClass(self.shrinkCls)
       }
     }
+
+    
     self.on = function(name, callback) {
+      // 创建自定义模块事件
       return layui.onevent(conf.eventName, 'system(' + name + ')', callback)
     }
+
     self.event = function(name, params) {
+      // 执行自定义模块事件
       layui.event(conf.eventName, 'system(' + name + ')', params)
     }
+
     self.csshref = function(name) {
       name = name == undefined ? self.route.path.join('/') : name
       return conf.css + 'views/' + name + '.css' + '?v=' + conf.v
     }
+
+    // 前进或后退页面
     self.prev = function(n) {
       if (n == undefined) n = -1
       window.history.go(n)
     }
+
+    // 锚链接
     self.navigate = function(url) {
       if (url == conf.entry) url = '/'
       window.location.hash = url
@@ -236,11 +240,15 @@ layui
       params.titleIcoColor = '#ed4014'
       self.modal.info(msg, params)
     }
+
+    // 正则验证是否为 url
     self.isUrl = function(str) {
       return /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/.test(
         str
       )
     }
+
+    // 弹出
     self.popup = function(params) {
       var url = params.url || ''
       var success = params.success || function() {}
@@ -330,6 +338,7 @@ layui
       }
     })
 
+    // lay-href 属性元素点击事件
     $(document).on('click', '[lay-href]', function(e) {
       var href = $(this).attr('lay-href')
       var target = $(this).attr('target')
@@ -351,6 +360,8 @@ layui
 
       return false
     })
+
+    // lay-popup 属性元素点击事件
     $(document).on('click', '[lay-popup]', function(e) {
       var params = $(this).attr('lay-popup')
       self.popup(
@@ -360,6 +371,8 @@ layui
       )
       return false
     })
+
+    // lay-tips 属性元素鼠标进入事件
     $(document).on('mouseenter', '[lay-tips]', function(e) {
       var title = $(this).attr('lay-tips')
       var dire = $(this).attr('lay-dire') || 3
@@ -369,6 +382,8 @@ layui
         })
       }
     })
+
+    // lay-tips 属性元素鼠标离开事件
     $(document).on('mouseleave', '[lay-tips]', function(e) {
       layer.closeAll('tips')
     })
@@ -377,6 +392,7 @@ layui
       self.event($(this).attr(conf.eventName), $(this))
     })
 
+    // 侧边栏按钮交互事件
     var shrinkSidebarBtn =
       '.' + self.shrinkCls + ' #app-sidebar .layui-nav-item a'
 
@@ -402,6 +418,8 @@ layui
       layer.closeAll('tips')
     })
 
+
+
     self.on('flexible', function(init) {
       var status = view.container.hasClass(self.shrinkCls)
       self.flexible(status)
@@ -423,6 +441,7 @@ layui
       self.logout()
     })
 
+    // 全屏
     self.on('fullscreen', function(e) {
       var normalCls = 'layui-icon-screen-full'
       var activeCls = 'layui-icon-screen-restore'
@@ -449,6 +468,7 @@ layui
       }
     })
 
+    // 初始化页面，适应大小
     if ($(window).width() <= mobileWidth) {
       mobileAdapter()
     } else {
