@@ -24,6 +24,7 @@ layui.extend({
     self.isInit = false
     self.routeLeaveFunc = null
     self.loginToken = null
+
     self.routeLeave = function(callback) {
       this.routeLeaveFunc = callback
     }
@@ -33,6 +34,8 @@ layui.extend({
       elem[action]('[is-template]').remove()
       view.parse(elem)
     }
+
+    // 获取登录口令
     self.getLoginToken = function() {
       if (self.loginToken == null) {
         self.loginToken =
