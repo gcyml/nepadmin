@@ -14,6 +14,7 @@ layui.extend({
     var self = {}
     var windowWidth = $(window).width()
 
+    // 获得location.hash路由
     self.route = layui.router()
     self.api = layui.api
     self.closeOnceHashChange = false
@@ -24,6 +25,7 @@ layui.extend({
     self.isInit = false
     self.routeLeaveFunc = null
     self.loginToken = null
+
     self.routeLeave = function(callback) {
       this.routeLeaveFunc = callback
     }
@@ -33,8 +35,11 @@ layui.extend({
       elem[action]('[is-template]').remove()
       view.parse(elem)
     }
+
+    // 获取登录口令
     self.getLoginToken = function() {
       if (self.loginToken == null) {
+        // layui.sessionData 存入到 session
         self.loginToken =
           self.data()[conf.tokenName] ||
           layui.sessionData(conf.tableName, conf.tokenName)
@@ -77,6 +82,7 @@ layui.extend({
     self.initPage = function(initCallback) {
       //加载样式文件
       layui.each(layui.conf.style, function(index, url) {
+        // 动态加载 css
         layui.link(url + '?v=' + conf.v)
       })
       self.initView(self.route)
@@ -96,6 +102,7 @@ layui.extend({
       route.fileurl = '/' + route.path.join('/')
       //判断登录页面
       if (conf.loginCheck == true) {
+        // 已登录
         if (self.getLoginToken()) {
           if (route.fileurl == conf.loginPage) {
             self.navigate('/')
@@ -109,6 +116,8 @@ layui.extend({
         }
       }
 
+      // 若当前链接不为 independence page（独立页面）
+      // 此处为登录、注册账号、忘记密码页面
       if ($.inArray(route.fileurl, conf.indPage) === -1) {
         var loadRenderPage = function(params) {
           if (conf.viewTabs == true) {
@@ -185,8 +194,14 @@ layui.extend({
       if (url == conf.entry) url = '/'
       window.location.hash = url
     }
+    
+    // 持久化存储数据
     self.data = function(settings, storage) {
+      // 若 seetings 为空，则返回表数据
       if (settings == undefined) return layui.data(conf.tableName)
+      
+      // 写入数据
+      // data 第三个参数为存储方式，这里官方文档并没有说明
       if ($.isArray(settings)) {
         layui.each(settings, function(i) {
           layui.data(conf.tableName, settings[i], storage)
@@ -196,6 +211,7 @@ layui.extend({
       }
     }
 
+    // TODO: 需要读取该内容代码
     self.modal = {}
     self.modal.info = function(msg, params) {
       params = params || {}
@@ -319,13 +335,16 @@ layui.extend({
       }
     })
 
+    // 当URL的片段标识符更改时，将触发hashchange事件
     $(window).on('hashchange', function(e) {
       //移动端跳转链接先把导航关闭
       if ($(window).width() < mobileWidth) {
         self.flexible(false)
       }
       self.route = layui.router()
+      // 关闭所有弹窗
       layer.closeAll()
+      // 重新初始化视图
       self.initView(self.route)
     })
 

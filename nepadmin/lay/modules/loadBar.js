@@ -1,3 +1,4 @@
+// 加载进度条
 layui.define(['jquery'],function(exports){
     var $ = layui.jquery;
     var self = {
@@ -56,6 +57,7 @@ layui.define(['jquery'],function(exports){
         }
         if(this.elem == null){
             this.elem = $('<div id="nepadmin-loadbar"></div>');
+            // 开头中插入
             $('body').prepend(this.elem);
         }
         this.elem.css({

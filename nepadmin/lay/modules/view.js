@@ -17,6 +17,7 @@ layui
           navigator.appVersion.split(';')[1].replace(/[ ]/g, '') == 'MSIE8.0'
             ? true
             : false,
+        // 获取容器
         container: $('#' + conf.container),
         containerBody: null
       }
@@ -117,6 +118,7 @@ layui
        */
       self.loadHtml = function(url, callback) {
         url = url || conf.entry
+        // 调用了此方法，显示加载进度条
         loadBar.start()
         var queryIndex = url.indexOf('?')
         if (queryIndex !== -1) url = url.slice(0, queryIndex)
@@ -131,6 +133,7 @@ layui
           dataType: 'html',
           success: function(html) {
             callback({ html: html, url: url })
+            // 加载完成，隐藏进度条
             loadBar.finish()
           },
           error: function(res) {
@@ -394,6 +397,7 @@ layui
       }
 
       self.fillHtml = function(url, htmlElem, modeName) {
+        // 是否为自适应的标题栏
         var fluid = htmlElem.find('.layui-fluid[lay-title]')
         var title = ''
         if (fluid.length > 0) {
@@ -402,6 +406,7 @@ layui
         }
 
         var container = self.containerBody || self.container
+        // 容器中填充入 html 内容
         container[modeName](htmlElem.html())
         if (modeName == 'prepend') {
           self.parse(container.children('[lay-url="' + url + '"]'))
@@ -414,7 +419,9 @@ layui
       }
       //解析普通文件
       self.render = function(fileurl, callback) {
+        // 加载 html 
         self.loadHtml(fileurl, function(res) {
+          // 创建 div
           var htmlElem = $('<div>' + res.html + '</div>')
           var params = self.fillHtml(res.url, htmlElem, 'html')
           if ($.isFunction(callback)) callback(params)
