@@ -1,4 +1,4 @@
-//请求URL
+//请求URL，配合 lay-api 使用
 layui.define([],function(exports){
     exports('api',{
         login:'json/login.js',

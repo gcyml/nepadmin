@@ -29,6 +29,9 @@ layui
         var reg = /<[^>]+>/g
         return reg.test(htmlStr)
       }
+
+      // 解析 html 方法
+      // 重要
       self.parse = function(container) {
         if (container == undefined) container = self.containerBody
         var template =
@@ -37,6 +40,7 @@ layui
             : container.find('[template]')
 
         var renderTemplate = function(template, data, callback) {
+          // 模板引擎渲染
           laytpl(template.html()).render(data, function(html) {
             try {
               html = $(
@@ -52,6 +56,7 @@ layui
           })
         }
 
+        // 遍历模板元素
         layui.each(template, function(index, tem) {
           var tem = $(tem)
           var url = tem.attr('lay-url') || ''
@@ -145,6 +150,7 @@ layui
         })
       }
 
+      // 标签页
       self.tab = {
         isInit: false,
         data: [],
@@ -160,6 +166,7 @@ layui
           var tab = this
           var btnCls = tab.wrap + ' .nepadmin-tabs-btn'
 
+          // 给关闭所有 tabs 按钮绑定下拉
           layui.dropdown.render({
             elem: '.nepadmin-tabs-down',
             click: function(name) {
@@ -177,15 +184,19 @@ layui
             ]
           })
 
+          // tab 按钮
           $(document).on('click', btnCls, function(e) {
+            // 关闭 tab 按钮
             var url = $(this).attr('lay-url')
             if ($(e.target).hasClass('nepadmin-tabs-close')) {
               tab.del(url)
-            } else {
+            } else {   
               var type = $(this).attr('data-type')
+              // 页面按钮
               if (type == 'page') {
                 tab.change(tab.has(url))
               } else if (type == 'prev' || type == 'next') {
+                // 左移右移按钮
                 tab.menuElem = $(tab.menu)
                 var menu = tab.menuElem
                 tab.minLeft = tab.minLeft || parseInt(menu.css('left'))
@@ -253,11 +264,13 @@ layui
           thisBody.remove()
 
           if (backgroundDel === undefined) {
+            // 若当前为激活元素，则激活列表中最后一个标签页
             if (thisMenu.hasClass('nepadmin-tabs-active')) {
               $(this.menu + ' li:last').click()
             }
           }
         },
+        // 刷新页面
         refresh: function(url) {
           url = url || layui.admin.route.fileurl
           if (this.has(url)) {
@@ -265,6 +278,7 @@ layui
             self.renderTabs(url)
           }
         },
+        // 清空所有
         clear: function() {
           this.data = []
           this.isInit = false
@@ -280,6 +294,7 @@ layui
           if (tab.isInit == false) tab.init()
 
           var changeView = function(lay) {
+            // 显示该元素，同时隐藏其他所有同级元素
             $('#' + conf.containerBody + ' > .nepadmin-tabs-item' + lay)
               .show()
               .siblings()
@@ -291,22 +306,28 @@ layui
           var activeCls = 'nepadmin-tabs-active'
 
           var existsTab = tab.has(fileurl)
+          // 若标签页已存在
           if (existsTab) {
             var menu = $(this.menu)
             var currentMenu = menu.find(lay)
 
             if (existsTab.href !== route.href) {
+              // 删除，重新添加标签页
               tab.del(existsTab.fileurl, true)
               tab.change(route)
               return false
               //tab.del(route.fileurl)
             }
+            
+            // 该 class 激活，同时去掉所有同级条件 class 激活
             currentMenu
               .addClass(activeCls)
               .siblings()
               .removeClass(activeCls)
 
             changeView(lay)
+
+            // 计算标签页条宽度，同时适应标签条
 
             this.minLeft = this.minLeft || parseInt(menu.css('left'))
 

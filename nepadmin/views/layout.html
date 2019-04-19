@@ -1,6 +1,7 @@
 <div class="layui-layout layui-layout-admin">
   <div class="layui-header" id="app-header">
-      <!-- layui 模板 -->
+      <!-- layui 动态模板 -->
+      <!-- element.render(type, filter) type为表单的type类型，filter，为元素的 lay-filter="" 的值 -->
     <script
       type="text/html"
       template
@@ -29,6 +30,7 @@
               </a>
           </li>
           -->
+          <!-- layui-hide-xs 宽度不超过 768 时隐藏 -->
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
               <input type="text" placeholder="Search / 搜索 ..." autocomplete="off" class="layui-input layui-search-input" nepadmin-event="serach">
           </li>
@@ -84,6 +86,7 @@
               <i class="layui-icon layui-icon-close"></i>
           </span>
           <ul class="nepadmin-tabs-menu">
+              <!-- 遍历生成tab -->
               {{# layui.each(layui.view.tab.data,function(i,item){ }}<li data-type="page" class="nepadmin-tabs-btn" lay-url="{{item.fileurl}}"><i class="nepadmin-tabs-ball"></i>{{ item.title }}<b class="layui-icon layui-icon-close nepadmin-tabs-close"></b></li>{{# }) }}
           </ul>
       </div>

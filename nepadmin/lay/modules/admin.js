@@ -158,7 +158,7 @@ layui.extend({
       }
     }
 
-    // 可适应页面
+    // 侧边栏
     self.flexible = function(open) {
       if (open == true) {
         view.container.removeClass(self.shrinkCls)
@@ -447,7 +447,7 @@ layui.extend({
     self.on('refresh', function(e) {
       var url = self.route.href
       if (conf.viewTabs == true) {
-        //view.tab.refresh(url);
+        // view.tab.refresh(url);
       } else {
         view.render(location.hash)
       }
